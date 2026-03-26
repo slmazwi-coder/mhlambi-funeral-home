@@ -9,7 +9,12 @@ const images = [
 const GallerySection = () => (
 	<section className="py-20 md:py-28 bg-muted">
 		<div className="container mx-auto px-4">
-			<motion.div initial= opacity: 0, y: 10  whileInView= opacity: 1, y: 0  viewport= once: true  className="text-center mb-14">
+			<motion.div
+				initial= opacity: 0, y: 10 
+				whileInView= opacity: 1, y: 0 
+				viewport= once: true 
+				className="text-center mb-14"
+			>
 				<p className="text-accent text-sm font-semibold tracking-widest uppercase mb-2">Gallery</p>
 				<h2 className="font-serif text-3xl md:text-4xl font-medium text-foreground">Our Fleet & Facilities</h2>
 			</motion.div>
