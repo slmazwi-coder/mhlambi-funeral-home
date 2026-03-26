@@ -57,14 +57,7 @@ const OPTIONAL_DOCS = ["Bank Proof / Statement (optional)"];
 
 const WHATSAPP_NUMBER = "27727458248";
 
-const quickReplies = [
-	"Plans",
-	"How to apply",
-	"Required documents",
-	"Contact",
-	"Payments",
-	"Services",
-];
+const quickReplies = ["Plans", "How to apply", "Required documents", "Contact", "Payments", "Services"];
 
 const initialMessages: Msg[] = [
 	{
@@ -85,7 +78,6 @@ function answerFromSiteInfo(input: string): string | null {
 	const q = normalize(input);
 	if (!q) return null;
 
-	// Plans
 	if (includesAny(q, ["plan", "plans", "package", "packages", "price", "pricing"])) {
 		return [
 			"We have 4 plan packages:",
@@ -94,7 +86,6 @@ function answerFromSiteInfo(input: string): string | null {
 		].join("\n");
 	}
 
-	// Specific plan names
 	const matchedPlan = plans.find((p) => q.includes(p.id) || q.includes(normalize(p.title)));
 	if (matchedPlan) {
 		return [
@@ -104,7 +95,6 @@ function answerFromSiteInfo(input: string): string | null {
 		].join("\n");
 	}
 
-	// Apply / join
 	if (includesAny(q, ["apply", "join", "application", "register", "sign up"])) {
 		return [
 			"You can apply online using the form on the Join page.",
@@ -116,7 +106,6 @@ function answerFromSiteInfo(input: string): string | null {
 		].join("\n");
 	}
 
-	// Documents
 	if (includesAny(q, ["document", "documents", "upload", "id", "proof", "address"])) {
 		return [
 			"Required documents:",
@@ -127,17 +116,14 @@ function answerFromSiteInfo(input: string): string | null {
 		].join("\n");
 	}
 
-	// Contact
 	if (includesAny(q, ["contact", "whatsapp", "phone", "call", "number"])) {
 		return "To contact Mhlambi’s Funeral Home, use the WhatsApp button on the website to chat with the team.";
 	}
 
-	// Payments (PaymentSection exists, but details may vary)
 	if (includesAny(q, ["pay", "payment", "payments", "deposit", "eft", "bank"])) {
 		return "For payment details, please check the Payments section on the website. If you need help, you can WhatsApp the team for the latest banking details.";
 	}
 
-	// Services (ServicesSection exists)
 	if (includesAny(q, ["service", "services", "funeral service", "burial", "tents", "chairs", "transport"])) {
 		return "We offer funeral services and support. For full service details, please see the Services section on the website, or WhatsApp the team for assistance.";
 	}
@@ -146,7 +132,7 @@ function answerFromSiteInfo(input: string): string | null {
 }
 
 function buildWhatsAppUrl(text: string) {
-	return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+	return `{{https://wa.me/${WHATSAPP_NUMBER}}}?text=${encodeURIComponent(text)}`;
 }
 
 export default function ChatbotWidget() {
@@ -169,10 +155,7 @@ export default function ChatbotWidget() {
 	}, [messages]);
 
 	const append = (newMsgs: Msg[]) => {
-		setMessages((prev) => {
-			const next = [...prev, ...newMsgs];
-			return next;
-		});
+		setMessages((prev) => [...prev, ...newMsgs]);
 		setTimeout(() => {
 			if (containerRef.current) containerRef.current.scrollTop = containerRef.current.scrollHeight;
 		}, 0);
@@ -190,8 +173,9 @@ export default function ChatbotWidget() {
 		setText("");
 	};
 
+	// Positioned above the WhatsApp button to avoid overlap.
 	return (
-		<div className="fixed bottom-5 right-5 z-50">
+		<div className="fixed bottom-24 right-6 z-50">
 			{open ? (
 				<div className="w-[360px] max-w-[calc(100vw-2rem)] rounded-2xl shadow-elevated border border-border bg-card overflow-hidden">
 					<div className="flex items-center justify-between px-4 py-3 bg-primary text-primary-foreground">
