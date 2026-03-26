@@ -6,22 +6,24 @@ import RepatriationSection from "@/components/RepatriationSection";
 import AboutSection from "@/components/AboutSection";
 import GallerySection from "@/components/GallerySection";
 import PaymentSection from "@/components/PaymentSection";
+import ContactSection from "@/components/ContactSection";
 import FooterSection from "@/components/FooterSection";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
 const Index = () => (
-  <>
-    <Navbar />
-    <HeroSection />
-    <PlansSection />
-    <ServicesSection />
-    <RepatriationSection />
-    <AboutSection />
-    <GallerySection />
-    <PaymentSection />
-    <FooterSection />
-    <WhatsAppButton />
-  </>
+	<>
+		<Navbar />
+		<HeroSection />
+		<PlansSection />
+		<ServicesSection />
+		<RepatriationSection />
+		<AboutSection />
+		<GallerySection />
+		<PaymentSection />
+		<ContactSection />
+		<FooterSection />
+		<WhatsAppButton />
+	</>
 );
 
 export default Index;
