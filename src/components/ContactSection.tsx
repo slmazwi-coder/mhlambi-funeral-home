@@ -15,7 +15,7 @@ export default function ContactSection() {
 
 					<div className="mt-10 grid md:grid-cols-3 gap-4">
 						<a
-							href={`{{https://wa.me/${WHATSAPP_NUMBER}}}`}
+							href={`https://wa.me/${WHATSAPP_NUMBER}`}
 							target="_blank"
 							rel="noopener noreferrer"
 							className="p-6 rounded-xl border border-border bg-muted hover:shadow-card transition-shadow"
