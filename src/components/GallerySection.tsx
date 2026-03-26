@@ -22,7 +22,7 @@ const GallerySection = () => (
 						initial= opacity: 0, y: 10 
 						whileInView= opacity: 1, y: 0 
 						viewport= once: true 
-						transition={{ delay: i * 0.08 }}
+						transition= delay: i * 0.08 
 						className="rounded-xl overflow-hidden shadow-card aspect-[4/3]"
 					>
 						<img
