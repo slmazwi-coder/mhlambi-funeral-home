@@ -18,10 +18,10 @@ const Navbar = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-sm border-b border-border">
       <div className="container mx-auto flex items-center justify-between h-16 px-4">
         <a href="#home" className="flex items-center gap-3">
-          <img src={logo} alt="Loyiso Funeral Services" className="h-12 w-12 rounded-full object-cover" />
+          <img src={logo} alt="Mhlambi's Funeral Home" className="h-12 w-12 rounded-full object-cover" />
           <div className="hidden sm:block">
-            <span className="font-serif text-lg font-semibold text-foreground">Loyiso</span>
-            <span className="block text-xs text-muted-foreground -mt-1">Funeral Services</span>
+            <span className="font-serif text-lg font-semibold text-foreground">Mhlambi's</span>
+            <span className="block text-xs text-muted-foreground -mt-1">Funeral Home</span>
           </div>
         </a>
 
@@ -34,9 +34,9 @@ const Navbar = () => {
         </div>
 
         <div className="hidden md:flex items-center gap-3">
-          <a href="tel:+27729745396" className="flex items-center gap-2 text-sm font-medium text-accent">
+          <a href="tel:+27727458248" className="flex items-center gap-2 text-sm font-medium text-accent">
             <Phone className="w-4 h-4" />
-            072 974 5396
+            072 745 8248
           </a>
         </div>
 
@@ -48,12 +48,17 @@ const Navbar = () => {
       {open && (
         <div className="md:hidden bg-card border-b border-border px-4 pb-4">
           {navLinks.map((l) => (
-            <a key={l.href} href={l.href} onClick={() => setOpen(false)} className="block py-2 text-sm font-medium text-muted-foreground hover:text-foreground">
+            <a
+              key={l.href}
+              href={l.href}
+              onClick={() => setOpen(false)}
+              className="block py-2 text-sm font-medium text-muted-foreground hover:text-foreground"
+            >
               {l.label}
             </a>
           ))}
-          <a href="tel:+27729745396" className="flex items-center gap-2 pt-2 text-sm font-medium text-accent">
-            <Phone className="w-4 h-4" /> 072 974 5396
+          <a href="tel:+27727458248" className="flex items-center gap-2 pt-2 text-sm font-medium text-accent">
+            <Phone className="w-4 h-4" /> 072 745 8248
           </a>
         </div>
       )}
