@@ -8,8 +8,8 @@ const RepatriationSection = () => (
 					<p className="text-gold-light text-sm font-semibold tracking-widest uppercase mb-2">Repatriation</p>
 					<h2 className="font-serif text-3xl md:text-4xl font-medium mb-4">Cross-Border & Provincial Transfers</h2>
 					<p className="text-primary-foreground/70 text-sm leading-relaxed mb-6">
-						We provide dignified repatriation services across South Africa and to neighbouring regions. Our team handles
-						all arrangements with care and respect.
+						We provide dignified repatriation services across South Africa and to neighbouring regions. Our team handles all
+						arrangements with care and respect.
 					</p>
 					<a
 						href="#contact"
@@ -18,6 +18,7 @@ const RepatriationSection = () => (
 						Enquire About Repatriation
 					</a>
 				</motion.div>
+
 				<motion.div initial= opacity: 0, y: 10  whileInView= opacity: 1, y: 0  viewport= once: true  transition= delay: 0.1 >
 					<img
 						src="/images/repatriation/Advert.jpg"
