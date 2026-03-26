@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Menu, X, Phone } from "lucide-react";
-import logo from "@/assets/logo.jpg";
+
+const LOGO_SRC = "/images/hero/Logo.jpg";
 
 const navLinks = [
 	{ label: "Home", href: "#home" },
@@ -19,7 +20,7 @@ const Navbar = () => {
 		<nav className="fixed top-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-sm border-b border-border">
 			<div className="container mx-auto flex items-center justify-between h-16 px-4">
 				<a href="#home" className="flex items-center gap-3">
-					<img src={logo} alt="Mhlambi's Funeral Home" className="h-12 w-12 rounded-full object-cover" />
+					<img src={LOGO_SRC} alt="Mhlambi's Funeral Home" className="h-12 w-12 rounded-full object-cover" />
 					<div className="hidden sm:block">
 						<span className="font-serif text-lg font-semibold text-foreground">Mhlambi's</span>
 						<span className="block text-xs text-muted-foreground -mt-1">Funeral Home</span>
