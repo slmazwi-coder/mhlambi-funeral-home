@@ -2,53 +2,59 @@ import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-const plans = [
+type Plan = {
+  id: string;
+  title: string;
+  image: string;
+  features: string[];
+  popular?: boolean;
+};
+
+const plans: Plan[] = [
   {
-    id: "basic",
-    title: "Basic Plan",
-    price: "110",
-    members: "1+5",
+    id: "isisekelo",
+    title: "Isisekelo Package",
+    image: "/images/plans/Isisekelo%20package.jpg",
     features: [
-      "Casket included",
-      "Funeral service coordination",
-      "Tents & chairs",
-      "Sound system",
-      "3 months waiting period",
+      "Affordable monthly cover",
+      "Dignified funeral service",
+      "Family support and guidance",
+      "Available 24/7",
     ],
-    popular: false,
   },
   {
-    id: "family",
-    title: "Family Plan",
-    price: "180",
-    members: "1+7",
+    id: "usizo",
+    title: "Usizo Package",
+    image: "/images/plans/Usizo%20package.jpg",
     features: [
-      "Premium casket selection",
-      "Full funeral coordination",
-      "Tents, chairs & decoration",
-      "Sound system & photography",
-      "Repatriation within SA",
-      "Cash benefit",
-      "3 months waiting period",
+      "Enhanced cover option",
+      "Funeral arrangements support",
+      "Tents & chairs (where applicable)",
+      "Professional service",
     ],
     popular: true,
   },
   {
-    id: "executive",
-    title: "Executive Plan",
-    price: "250",
-    members: "1+9",
+    id: "uhambo",
+    title: "Uhambo Package",
+    image: "/images/plans/Uhambo%20package.jpg",
     features: [
-      "Executive casket / coffin",
-      "Complete funeral management",
-      "Premium décor & tenting",
-      "Sound, photography & videography",
-      "Repatriation (SA & Lesotho)",
-      "Cash benefit & tombstone",
-      "Grocery benefit",
-      "3 months waiting period",
+      "Premium cover option",
+      "Burial support and coordination",
+      "Transport support (where applicable)",
+      "Compassionate care",
     ],
-    popular: false,
+  },
+  {
+    id: "burial",
+    title: "Burial Plan",
+    image: "/images/plans/burial%20plan.jpg",
+    features: [
+      "Burial plan option",
+      "Support with funeral logistics",
+      "Guidance and coordination",
+      "Available in Duduza and surrounding areas",
+    ],
   },
 ];
 
@@ -59,68 +65,70 @@ const PlansSection = () => {
     <section id="plans" className="py-20 md:py-28 bg-muted">
       <div className="container mx-auto px-4">
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
           className="text-center mb-14"
         >
           <p className="text-accent text-sm font-semibold tracking-widest uppercase mb-2">Our Plans</p>
-          <h2 className="font-serif text-3xl md:text-4xl font-medium text-foreground">
-            Funeral Cover for Your Family
-          </h2>
-          <p className="mt-3 text-muted-foreground max-w-lg mx-auto">
-            Affordable monthly premiums starting from as little as R110/pm. No joining fee.
+          <h2 className="font-serif text-3xl md:text-4xl font-medium text-foreground">Choose a Package</h2>
+          <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
+            Select a package that suits your family. You can apply online and our team will contact you to confirm details.
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
           {plans.map((plan, i) => (
             <motion.div
               key={plan.id}
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              className={`relative p-8 rounded-xl bg-card shadow-card hover:shadow-elevated transition-shadow border ${
+              transition={{ duration: 0.6, delay: i * 0.05 }}
+              className={`relative rounded-xl bg-card shadow-card hover:shadow-elevated transition-shadow border overflow-hidden ${
                 plan.popular ? "border-accent" : "border-border"
               }`}
             >
               {plan.popular && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-accent-foreground text-xs font-bold px-4 py-1 rounded-full">
-                  Most Popular
+                <span className="absolute top-3 right-3 bg-accent text-accent-foreground text-xs font-bold px-3 py-1 rounded-full shadow">
+                  Popular
                 </span>
               )}
-              <h3 className="font-serif text-2xl font-medium text-foreground">{plan.title}</h3>
-              <p className="text-muted-foreground text-sm mt-1">{plan.members} Members</p>
-              <p className="mt-4">
-                <span className="text-accent font-bold text-3xl">R{plan.price}</span>
-                <span className="text-muted-foreground text-sm">/pm</span>
-              </p>
-              <ul className="mt-6 space-y-3 mb-8">
-                {plan.features.map((f) => (
-                  <li key={f} className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <Check className="w-4 h-4 text-accent mt-0.5 shrink-0" />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <button
-                onClick={() => navigate(`/join?plan=${plan.id}`)}
-                className={`w-full py-3 rounded-lg font-medium text-sm transition-colors ${
-                  plan.popular
-                    ? "bg-primary text-primary-foreground hover:bg-navy-light"
-                    : "bg-muted text-foreground hover:bg-border"
-                }`}
-              >
-                Select Plan
-              </button>
+
+              <div className="aspect-[4/3] bg-muted overflow-hidden">
+                <img src={plan.image} alt={plan.title} className="w-full h-full object-cover" loading="lazy" />
+              </div>
+
+              <div className="p-6">
+                <h3 className="font-serif text-xl font-medium text-foreground">{plan.title}</h3>
+
+                <ul className="mt-4 space-y-2.5">
+                  {plan.features.map((f) => (
+                    <li key={f} className="flex items-start gap-2 text-sm text-muted-foreground">
+                      <Check className="w-4 h-4 text-accent mt-0.5 shrink-0" />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+
+                <button
+                  onClick={() => navigate(`/join?plan=${plan.id}`)}
+                  className={`mt-6 w-full py-3 rounded-lg font-medium text-sm transition-colors ${
+                    plan.popular
+                      ? "bg-primary text-primary-foreground hover:bg-navy-light"
+                      : "bg-muted text-foreground hover:bg-border"
+                  }`}
+                >
+                  Apply for this plan
+                </button>
+              </div>
             </motion.div>
           ))}
         </div>
 
         <p className="text-center text-xs text-muted-foreground mt-8">
-          *Restrictions apply. Prices subject to change. 6 months waiting period for natural death.
+          *Package contents can vary. Final confirmation will be done with our team.
         </p>
       </div>
     </section>
