@@ -5,7 +5,7 @@ const AboutSection = () => (
 	<section id="about" className="py-20 md:py-28 bg-muted">
 		<div className="container mx-auto px-4">
 			<div className="grid md:grid-cols-2 gap-12 items-center max-w-5xl mx-auto">
-				<motion.div initial= opacity: 0, y: 10  whileInView= opacity: 1, y: 0  viewport= once: true >
+				<motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
 					<img
 						src={ownerImg}
 						alt="Mhlambi’s Funeral Home"
@@ -13,16 +13,19 @@ const AboutSection = () => (
 					/>
 				</motion.div>
 
-				<motion.div initial= opacity: 0, y: 10  whileInView= opacity: 1, y: 0  viewport= once: true  transition= delay: 0.1 >
+				<motion.div
+					initial={{ opacity: 0, y: 10 }}
+					whileInView={{ opacity: 1, y: 0 }}
+					viewport={{ once: true }}
+					transition={{ delay: 0.1 }}
+				>
 					<p className="text-accent text-sm font-semibold tracking-widest uppercase mb-2">About Us</p>
 					<h2 className="font-serif text-3xl md:text-4xl font-medium text-foreground mb-6">Serving Duduza with Honour</h2>
 
 					<div className="space-y-4 text-muted-foreground text-sm leading-relaxed">
 						<div>
 							<h3 className="font-serif text-lg font-medium text-foreground mb-1">Our Vision</h3>
-							<p>
-								To be a trusted funeral service provider that supports families with dignity, care, and respect.
-							</p>
+							<p>To serve families with dignity, care, and respect.</p>
 						</div>
 						<div>
 							<h3 className="font-serif text-lg font-medium text-foreground mb-1">Our Mission</h3>
