@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 const slides = [
@@ -22,10 +22,10 @@ const HeroSection = () => {
 					key={index}
 					src={slides[index].src}
 					alt={slides[index].alt}
-					initial= opacity: 0 
-					animate= opacity: 1 
-					exit= opacity: 0 
-					transition= duration: 0.9 
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 1 }}
+					exit={{ opacity: 0 }}
+					transition={{ duration: 0.9 }}
 					className="absolute inset-0 w-full h-full object-cover"
 				/>
 			</AnimatePresence>
@@ -33,7 +33,7 @@ const HeroSection = () => {
 			<div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/55 to-primary/25" />
 
 			<div className="relative z-10 container mx-auto px-4 h-full flex flex-col justify-end pb-16 md:pb-24">
-				<motion.div initial= y: 24, opacity: 0  animate= y: 0, opacity: 1  transition= duration: 0.9 >
+				<motion.div initial={{ y: 24, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.9 }}>
 					<p className="text-gold-light text-sm font-semibold tracking-widest uppercase mb-3">"Everything has its time"</p>
 					<h1 className="font-serif text-4xl md:text-6xl lg:text-7xl font-medium text-primary-foreground max-w-3xl leading-tight">
 						Supporting Families with Dignity&nbsp;and&nbsp;Respect
