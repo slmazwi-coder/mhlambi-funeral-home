@@ -1,23 +1,75 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { MessageCircle, Send, X } from "lucide-react";
 
 type Msg = { role: "user" | "bot"; text: string };
 
-type Plan = { id: string; title: string };
+type Plan = {
+	id: string;
+	title: string;
+	features: string[];
+};
 
 const plans: Plan[] = [
-	{ id: "isisekelo", title: "Isisekelo Package" },
-	{ id: "usizo", title: "Usizo Package" },
-	{ id: "uhambo", title: "Uhambo Package" },
-	{ id: "burial", title: "Burial Plan" },
+	{
+		id: "isisekelo",
+		title: "Isisekelo Package",
+		features: [
+			"Affordable monthly cover",
+			"Dignified funeral service",
+			"Family support and guidance",
+			"Available 24/7",
+		],
+	},
+	{
+		id: "usizo",
+		title: "Usizo Package",
+		features: [
+			"Enhanced cover option",
+			"Funeral arrangements support",
+			"Tents & chairs (where applicable)",
+			"Professional service",
+		],
+	},
+	{
+		id: "uhambo",
+		title: "Uhambo Package",
+		features: [
+			"Premium cover option",
+			"Burial support and coordination",
+			"Transport support (where applicable)",
+			"Compassionate care",
+		],
+	},
+	{
+		id: "burial",
+		title: "Burial Plan",
+		features: [
+			"Burial plan option",
+			"Support with funeral logistics",
+			"Guidance and coordination",
+			"Available in Duduza and surrounding areas",
+		],
+	},
 ];
 
+const REQUIRED_DOCS = ["ID Copy (Main Member)", "Proof of Address"];
+const OPTIONAL_DOCS = ["Bank Proof / Statement (optional)"];
+
 const WHATSAPP_NUMBER = "27727458248";
+
+const quickReplies = [
+	"Plans",
+	"How to apply",
+	"Required documents",
+	"Contact",
+	"Payments",
+	"Services",
+];
 
 const initialMessages: Msg[] = [
 	{
 		role: "bot",
-		text: "Hi! I am Mhlambi’s assistant. How can I help you today? You can ask about plans, documents, or how to apply.",
+		text: "Hi! I am Mhlambi’s assistant. I can help with plans, documents, applying, contact details, and general questions about the site. What would you like to know?",
 	},
 ];
 
@@ -25,68 +77,123 @@ function normalize(s: string) {
 	return s.toLowerCase().trim();
 }
 
-function replyFor(input: string): string {
+function includesAny(q: string, words: string[]) {
+	return words.some((w) => q.includes(w));
+}
+
+function answerFromSiteInfo(input: string): string | null {
 	const q = normalize(input);
+	if (!q) return null;
 
-	if (!q) return "Please type your question.";
-
-	if (q.includes("plan") || q.includes("package") || q.includes("price")) {
+	// Plans
+	if (includesAny(q, ["plan", "plans", "package", "packages", "price", "pricing"])) {
 		return [
 			"We have 4 plan packages:",
 			...plans.map((p) => `• ${p.title}`),
-			"To apply, open the plan section and click \"Apply for this plan\".",
+			"To apply, open the Plans section and click \"Apply for this plan\".",
 		].join("\n");
 	}
 
-	if (q.includes("apply") || q.includes("join") || q.includes("application")) {
+	// Specific plan names
+	const matchedPlan = plans.find((p) => q.includes(p.id) || q.includes(normalize(p.title)));
+	if (matchedPlan) {
+		return [
+			`${matchedPlan.title} includes:`,
+			...matchedPlan.features.map((f) => `• ${f}`),
+			"To apply for this plan, click \"Apply for this plan\" in the Plans section.",
+		].join("\n");
+	}
+
+	// Apply / join
+	if (includesAny(q, ["apply", "join", "application", "register", "sign up"])) {
 		return [
 			"You can apply online using the form on the Join page.",
-			"Choose a plan, fill in your details, and upload your documents.",
-			"If you cannot upload documents now, submit the form and then WhatsApp us your documents.",
+			"Steps:",
+			"1) Choose a plan",
+			"2) Fill in your details",
+			"3) Upload your documents (PDF or images)",
+			"If you cannot upload documents now, submit the form and then WhatsApp the documents.",
 		].join("\n");
 	}
 
-	if (q.includes("document") || q.includes("upload") || q.includes("id") || q.includes("proof")) {
+	// Documents
+	if (includesAny(q, ["document", "documents", "upload", "id", "proof", "address"])) {
 		return [
 			"Required documents:",
-			"• ID Copy (Main Member)",
-			"• Proof of Address",
+			...REQUIRED_DOCS.map((d) => `• ${d}`),
 			"Optional:",
-			"• Bank Proof / Statement",
+			...OPTIONAL_DOCS.map((d) => `• ${d}`),
 			"You can upload PDF or images.",
 		].join("\n");
 	}
 
-	if (q.includes("contact") || q.includes("whatsapp") || q.includes("phone") || q.includes("call")) {
-		return "You can contact us on WhatsApp. Click the WhatsApp button on the website to chat with the team.";
+	// Contact
+	if (includesAny(q, ["contact", "whatsapp", "phone", "call", "number"])) {
+		return "To contact Mhlambi’s Funeral Home, use the WhatsApp button on the website to chat with the team.";
 	}
 
-	return "I can help with plans, documents, and how to apply. If you need more help, please WhatsApp the team.";
+	// Payments (PaymentSection exists, but details may vary)
+	if (includesAny(q, ["pay", "payment", "payments", "deposit", "eft", "bank"])) {
+		return "For payment details, please check the Payments section on the website. If you need help, you can WhatsApp the team for the latest banking details.";
+	}
+
+	// Services (ServicesSection exists)
+	if (includesAny(q, ["service", "services", "funeral service", "burial", "tents", "chairs", "transport"])) {
+		return "We offer funeral services and support. For full service details, please see the Services section on the website, or WhatsApp the team for assistance.";
+	}
+
+	return null;
+}
+
+function buildWhatsAppUrl(text: string) {
+	return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
 }
 
 export default function ChatbotWidget() {
 	const [open, setOpen] = useState(false);
 	const [messages, setMessages] = useState<Msg[]>(initialMessages);
 	const [text, setText] = useState("");
+	const containerRef = useRef<HTMLDivElement | null>(null);
 
-	const whatsappFallbackHref = useMemo(() => {
-		const lastUserMsg = [...messages].reverse().find((m) => m.role === "user")?.text || "";
-		const txt = `Hi Mhlambi’s Funeral Home, I need help with: ${lastUserMsg}`;
-		return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(txt)}`;
+	const whatsappRelayHref = useMemo(() => {
+		const transcript = messages
+			.filter((m) => m.role !== "bot" || m.text !== initialMessages[0]?.text)
+			.map((m) => (m.role === "user" ? `Customer: ${m.text}` : `Bot: ${m.text}`))
+			.join("\n\n");
+
+		const txt = transcript
+			? `Hi Mhlambi’s Funeral Home, I need help. Here is what I asked on the website chat:\n\n${transcript}`
+			: "Hi Mhlambi’s Funeral Home, I need help.";
+
+		return buildWhatsAppUrl(txt);
 	}, [messages]);
 
-	const send = () => {
-		const trimmed = text.trim();
+	const append = (newMsgs: Msg[]) => {
+		setMessages((prev) => {
+			const next = [...prev, ...newMsgs];
+			return next;
+		});
+		setTimeout(() => {
+			if (containerRef.current) containerRef.current.scrollTop = containerRef.current.scrollHeight;
+		}, 0);
+	};
+
+	const send = (override?: string) => {
+		const raw = override ?? text;
+		const trimmed = raw.trim();
 		if (!trimmed) return;
 
-		setMessages((prev) => [...prev, { role: "user", text: trimmed }, { role: "bot", text: replyFor(trimmed) }]);
+		const direct = answerFromSiteInfo(trimmed);
+		const botText = direct ?? "I am not 100% sure. Please click \"Continue on WhatsApp\" so the team can assist you.";
+
+		append([{ role: "user", text: trimmed }, { role: "bot", text: botText }]);
 		setText("");
 	};
 
 	return (
 		<div className="fixed bottom-5 right-5 z-50">
 			{open ? (
-				<div className="w-[340px] max-w-[calc(100vw-2rem)] rounded-2xl shadow-elevated border border-border bg-card overflow-hidden">
+				<div className="w-[360px] max-w-[calc(100vw-2rem)] rounded-2xl shadow-elevated border border-border bg-card overflow-hidden">
 					<div className="flex items-center justify-between px-4 py-3 bg-primary text-primary-foreground">
 						<div className="flex items-center gap-2">
 							<MessageCircle className="w-5 h-5" />
@@ -101,14 +208,26 @@ export default function ChatbotWidget() {
 						</button>
 					</div>
 
-					<div className="p-4 space-y-3 max-h-[360px] overflow-y-auto">
+					<div className="p-3 border-b border-border bg-card">
+						<div className="flex flex-wrap gap-2">
+							{quickReplies.map((q) => (
+								<button
+									key={q}
+									onClick={() => send(q)}
+									className="text-xs px-3 py-1.5 rounded-full border border-border bg-muted hover:bg-border transition-colors"
+								>
+									{q}
+								</button>
+							))}
+						</div>
+					</div>
+
+					<div ref={containerRef} className="p-4 space-y-3 max-h-[360px] overflow-y-auto">
 						{messages.map((m, i) => (
 							<div
 								key={i}
 								className={`text-sm whitespace-pre-line rounded-xl px-3 py-2 border ${
-									m.role === "user"
-										? "ml-8 bg-muted border-border"
-										: "mr-8 bg-card border-border"
+									m.role === "user" ? "ml-8 bg-muted border-border" : "mr-8 bg-card border-border"
 								}`}
 							>
 								{m.text}
@@ -131,7 +250,7 @@ export default function ChatbotWidget() {
 								className="flex-1 px-3 py-2 rounded-lg border border-border bg-card text-foreground text-sm focus:outline-none focus:ring-2 ring-gold"
 							/>
 							<button
-								onClick={send}
+								onClick={() => send()}
 								className="px-3 py-2 rounded-lg bg-primary text-primary-foreground hover:bg-navy-light transition-colors"
 								aria-label="Send"
 							>
@@ -140,7 +259,7 @@ export default function ChatbotWidget() {
 						</div>
 
 						<a
-							href={whatsappFallbackHref}
+							href={whatsappRelayHref}
 							target="_blank"
 							rel="noopener noreferrer"
 							className="mt-3 block text-center text-sm font-semibold px-3 py-2 rounded-lg bg-[hsl(142,70%,41%)] text-white hover:opacity-95 transition-opacity"
